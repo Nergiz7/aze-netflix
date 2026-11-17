@@ -10,7 +10,8 @@ Azərbaycan kinosunun klassik və müasir filmlərini kəşf etmək üçün haz�
 - LocalStorage ilə yadda saxlanan şəxsi Siyahım
 - Janr seçiminə uyğun təsadüfi film tövsiyəsi
 - Film məlumatları üçün modal pəncərə
-- Doğrulanmış video üçün sayt daxilində YouTube pleyeri
+- 23 tam film və 1 treyler üçün böyük, sayt daxilində YouTube pleyeri; oynadıla bilən film kartına toxunmaq dərhal pleyeri açır
+- Kartda ayrıca “Ətraflı” düyməsi və video növünə görə izləmə bölməsi
 - Mobil cihazlara uyğun tərtibat və klaviatura ilə Escape bağlanması
 
 ## Texnologiyalar
@@ -37,7 +38,9 @@ npm run build
 
 ## YouTube inteqrasiyası
 
-Pleyer yalnız mənbə və film uyğunluğu bu layihə üçün axtarış zamanı yoxlanmış rəsmi Azərbaycanfilm kanalındakı “Arşın mal alan” videosu üçün aktivdir. Video saytın daxilində YouTube-un rəsmi iframe pleyeri ilə göstərilir. Video mövcud olmadıqda və ya yerləşdirmə bağlı olduqda YouTube səhifəsinə keçid təqdim edilir. Qalan filmlərə uyğun rəsmi video və ya treyler bu iş zamanı təsdiqlənmədiyi üçün uydurma video ID-ləri əlavə edilməyib.
+Oynadıla bilən kartın əsas sahəsinə klik böyük embed pleyeri dərhal açır və autoplay sorğusu göndərir. “Ətraflı” ayrıca düymədir. Təsdiqlənmiş video mənbələrinə 23 tam film və 1 treyler daxildir; 12 namizəd ID-si ayrıca auditdə saxlanılıb və hüquq/yükləyici təsdiqlənməyənədək pleyerdə aktiv deyil. Rəsmi YouTube iframe-i bəzi videolarda yükləyici ayarlarına görə bloklana bilər; belə halda pleyerdə YouTube səhifəsinə keçid görünür. Filmə uyğun video mənbəyinin yoxlanması iframe-in hər cihazda oynayacağını təsdiqləmir.
+
+Tam audit üçün [`docs/MEDIA_VERIFICATION.md`](docs/MEDIA_VERIFICATION.md) və istifadə olunan mənbələr üçün [`docs/SOURCES.md`](docs/SOURCES.md) baxın.
 
 ## Mənbələr və vizual materiallar
 

@@ -1,4 +1,25 @@
-export type Movie = { id: string; title: string; year: number; genre: string; description: string; poster: string; sourceUrl: string; youtubeId?: string; videoType?: "Tam film" | "Treyler" };
+export type VideoType = "full" | "trailer" | "clip";
+export type MovieVideo = {
+  youtubeId: string;
+  videoUrl: string;
+  videoType: VideoType;
+  videoVerificationStatus: "matched";
+  uploader: string;
+  rightsStatus: "official-channel-upload; legal grant not independently verified";
+  embeddingStatus: "not-tested";
+  thumbnailUrl: string;
+  thumbnailSource: "youtube-thumbnail";
+  thumbnailRightsStatus: "remote-platform-thumbnail";
+};
+export type VideoCandidate = {
+  youtubeId: string;
+  videoUrl: string;
+  claimedType: VideoType | "unknown";
+  uploader: string;
+  rightsStatus: string;
+  videoVerificationStatus: "candidate";
+};
+export type Movie = { id: string; title: string; year: number; genre: string; description: string; poster: string; sourceUrl: string; video?: MovieVideo; videoCandidate?: VideoCandidate };
 const classicSource = "https://kinobox.az/az/browse";
 const cinema = "https://kinobiz.az/az/cinema/";
 // Original CSS title artwork is generated locally for each title; no film-poster images are copied.
@@ -31,7 +52,7 @@ export const movies: Movie[] = [
   make("m25","Evlənmək istəyirəm",1983,"Komediya","Evlənmək arzusu ilə yola çıxan qəhrəman gözlənilməz tanışlıqlarla qarşılaşır. Səyahət boyunca baş verən hadisələr məişət komediyası yaradır.","evlenmek-isteyirem"),
   make("m26","Tənha narın nağılı",1984,"Dram","Film kənd həyatında insanın tənhalığına və yaxınlıq ehtiyacına toxunur. Hekayə sadə gündəlik hadisələr üzərindən münasibətləri araşdırır.","tenha-narin-nagili"),
   make("m27","Qaladan tapılan mücrü",1982,"Macəra","Qədim qalada tapılan mücrü macəra dolu axtarışın başlanğıcına çevrilir. Qəhrəmanlar sirri açmaq üçün izləri izləyirlər.","qaladan-tapilan-mucru"),
-  make("m28","Yay günlərinin xəzan yarpaqları",1986,"Dram","Film gündəlik həyatın içində insan münasibətlərindəki dəyişiklikləri izləyir. Yayın sakit günləri qəhrəmanların xatirələri və qərarları ilə kəsişir.","yay-gunlerinin-xezen-yarpaqlari"),
+  make("m28","Yay günlərində xəzan yarpaqları",1986,"Dram","Hadisələr ucqar dağ kəndində baş verir. Film yaşlılarla yeniyetmələr arasındakı münasibətlərə və böyümə prosesinə toxunur.","yay-gunlerinin-xezen-yarpaqlari"),
   make("m29","Alman klinikasına şəxsi səfər",1988,"Dram","Şəxsi məqsədlə Almaniyaya gedən qəhrəman səfər zamanı yeni insanlarla və çətin seçimlərlə qarşılaşır. Film yol, münasibətlər və insanın özünü dərk etməsi mövzularını birləşdirir.","alman-klinikasina-sexsi-sefer"),
   make("m30","Tələ",1990,"Detektiv","Bir cinayət hadisəsi ətrafında şübhələr və araşdırma inkişaf edir. Qəhrəmanlar həqiqətə çatmaq üçün hadisələrin gizli tərəflərini açmağa çalışırlar.","tele"),
   make("m31","Qətl günü",1990,"Psixoloji dram","Film yazıçı Mövludun xəstəxanada keçirdiyi günlər və daxili düşüncələri ətrafında qurulur. Müxtəlif zaman qatları və simvolik obrazlar hekayədə birləşir.","qetl-gunu"),
@@ -41,9 +62,53 @@ export const movies: Movie[] = [
   make("m35","Xoxanlar",2020,"Komediya","Müasir Azərbaycan komediyası gözlənilməz vəziyyətlərə düşən personajların ətrafında qurulur. Qarışıq hadisələr yumor və məişət münasibətlərini önə çıxarır.","xoxanlar"),
   make("m36","İçəri şəhər",2016,"Dram","Filmin hadisələri Bakının İçərişəhər mühitində cərəyan edir. Şəxsi münasibətlər və şəhər həyatının ritmi qəhrəmanların hekayəsində kəsişir.","iceri-seher")
 ];
-// Verified official-channel upload: Arşın mal alan (1966), described by Azərbaycanfilm as a musical comedy.
-movies[0].youtubeId = "HRrs3pW_1ok";
-movies[0].videoType = "Tam film";
+// These candidates match videos published by the film studio's own YouTube channel.
+// Embedding is checked at runtime by YouTube; it has not been manually tested for every ID.
+const officialUploads: Record<string, { youtubeId: string; videoType?: VideoType }> = {
+  m01: { youtubeId: "HRrs3pW_1ok" }, m02: { youtubeId: "mZTbGUGk7Rc" }, m03: { youtubeId: "yOIpgYGqa7g" },
+  m04: { youtubeId: "Js9RX9k5VnI" }, m05: { youtubeId: "qnILHJ2NsPY" }, m06: { youtubeId: "M06c43Bc2-k" },
+  m08: { youtubeId: "-Y1JmAZeUMA" }, m10: { youtubeId: "phEjrY4czs4" }, m11: { youtubeId: "NI9D6hvuOGE" },
+  m12: { youtubeId: "yt-1zuQJ3nA" }, m14: { youtubeId: "br9zD5f-c4A" }, m15: { youtubeId: "596lOCYdiaA" },
+  m17: { youtubeId: "bPjf942ZYmc" }, m18: { youtubeId: "x7GxpWC20Cc" }, m19: { youtubeId: "g7apfwPQ_70" },
+  m20: { youtubeId: "2ZX5ssKQwqw" }, m21: { youtubeId: "TTJEJKzXFrQ" }, m22: { youtubeId: "QJWHSuzBa6Q" },
+  m25: { youtubeId: "EntBRbGwC4E" }, m26: { youtubeId: "hur6KHLCTLY" }, m28: { youtubeId: "VZf66_n1kxk" },
+  m29: { youtubeId: "EZXSQhhlBIc" }, m30: { youtubeId: "6IL9m97l8WQ" },
+  m35: { youtubeId: "Jo_dRFUuUag", videoType: "trailer" },
+};
+for (const movie of movies) {
+  const upload = officialUploads[movie.id];
+  if (upload) movie.video = {
+    youtubeId: upload.youtubeId,
+    videoUrl: `https://www.youtube.com/watch?v=${upload.youtubeId}`,
+    videoType: upload.videoType || "full",
+    videoVerificationStatus: "matched",
+    uploader: movie.id === "m35" ? "Xəzər Film (verified channel)" : "Azərbaycanfilm",
+    rightsStatus: "official-channel-upload; legal grant not independently verified",
+    embeddingStatus: "not-tested",
+    thumbnailUrl: `https://i.ytimg.com/vi/${upload.youtubeId}/hqdefault.jpg`,
+    thumbnailSource: "youtube-thumbnail",
+    thumbnailRightsStatus: "remote-platform-thumbnail",
+  };
+}
+const candidateUploads: Record<string, { youtubeId: string; claimedType?: VideoCandidate["claimedType"]; uploader?: string; rights?: string }> = {
+  m07: { youtubeId: "FQrNIcWhCo0" }, m09: { youtubeId: "5Ey7IYtSoCM", claimedType: "unknown", rights: "Axtarış nəticəsi yalnız filmdən bir epizoda işarə edir; tam video kimi təsdiqlənməyib." },
+  m13: { youtubeId: "88uxFYb1354" }, m16: { youtubeId: "U1csklsXuAs" }, m23: { youtubeId: "Q_pw4eOm3wI" },
+  m24: { youtubeId: "OGslWWHZoEs", claimedType: "clip", rights: "Fraqment namizədi; hüquq sahibi və yerləşdirmə icazəsi təsdiqlənməyib." },
+  m27: { youtubeId: "qz-jG6gVDR4" }, m31: { youtubeId: "TRZ53mEqxAM" }, m32: { youtubeId: "FCSuwBCktks" },
+  m33: { youtubeId: "h488X2UclrE" }, m34: { youtubeId: "zlSP9kZWyb0", rights: "Təsvirində lisenziya razılaşması olduğu istifadəçi tərəfindən bildirilib; təsvir və müqavilə bu araşdırmada müstəqil yoxlanmayıb." },
+  m36: { youtubeId: "SRtXm0Cz4os", claimedType: "trailer", uploader: "İlqar Safat (istifadəçi məlumatı; müstəqil təsdiqlənməyib)", rights: "Rejissor yükləməsi olduğu iddia edilir; müstəqil yoxlanmayıb." },
+};
+for (const movie of movies) {
+  const candidate = candidateUploads[movie.id];
+  if (candidate) movie.videoCandidate = {
+    youtubeId: candidate.youtubeId,
+    videoUrl: `https://www.youtube.com/watch?v=${candidate.youtubeId}`,
+    claimedType: candidate.claimedType || "full",
+    uploader: candidate.uploader || "Təsdiqlənməyib",
+    rightsStatus: candidate.rights || "Yükləyici və istifadə hüququ müstəqil təsdiqlənməyib.",
+    videoVerificationStatus: "candidate",
+  };
+}
 movies[0].sourceUrl = "https://www.youtube.com/watch?v=HRrs3pW_1ok";
 movies[33].sourceUrl = "https://kinobiz.az/az/organizations/azerbaycanfilm-kinostudiyasi?page=2";
 export const genres = [...new Set(movies.map((movie) => movie.genre))].sort((a,b) => a.localeCompare(b, "az"));
